@@ -2,11 +2,13 @@ package servlets;
 
 import java.io.IOException;
 
+import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import model.ModelLogin;
 
 
 
@@ -33,8 +35,45 @@ public class ServletLogin extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doGet(request, response);
 		
-		System.out.println(request.getParameter("nome"));
-		System.out.println(request.getParameter("idade"));
+		
+		String login = request.getParameter("login");
+		String senha = request.getParameter("senha");
+		
+		
+		System.out.println("Capturado da tela login "+login);
+		System.out.println("Capturado da tela senha "+senha);
+		
+		
+		
+		
+		
+		if (login!= null && !login.isEmpty() && senha != null && !senha.isEmpty()) {
+		
+			System.out.print("Entrou no if");
+		ModelLogin usuario = new ModelLogin();
+		usuario.setLogin(login);
+		usuario.setSenha(senha);
+		
+		if(usuario.getLogin().equalsIgnoreCase("admin") && usuario.getLogin().equalsIgnoreCase("admin")) {
+			
+			request.getSession().setAttribute("usuario", usuario.getLogin());//servira para autenticar uma seção de segurança
+			
+			RequestDispatcher redirecionar = request.getRequestDispatcher("principal/principal.jsp");
+			redirecionar.forward(request, response);
+			
+		}else {
+			RequestDispatcher redirecionar= request.getRequestDispatcher("index.jsp");
+			request.setAttribute("msg", "Informe o login e senha corretamente");
+			redirecionar.forward(request, response);
+			
+		}
+		
+		}else {
+			System.out.println("Não entrou no if");
+			RequestDispatcher redirecionar= request.getRequestDispatcher("index.jsp");
+			request.setAttribute("msg", "Informe o login e senha corretamente");
+			redirecionar.forward(request, response);
+		}
 		
 	}
 
