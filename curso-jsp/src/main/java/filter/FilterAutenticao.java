@@ -44,7 +44,7 @@ public class FilterAutenticao implements Filter {
 			
 			RequestDispatcher redireciona = request.getRequestDispatcher("/index.jsp?url=" + urlParaAutenticar);
 			request.setAttribute("msg", "Por favor realize o login!");
-			redireciona.forward(request, response);
+			redireciona.forward(request, response);/**/
 			return; /*Para a execução e redireciona para o login*/
 			
 		}else {
