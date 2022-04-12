@@ -1,0 +1,3 @@
+Esse comando redireciona , mapeia e encontra a pasta final do caminho
+<%= request.getContextPath() %>/  // o caminho do arquivo.
+
