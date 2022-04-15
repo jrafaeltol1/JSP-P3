@@ -2,7 +2,10 @@ package dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+
+import com.sun.net.httpserver.Authenticator.Result;
 
 import connection.SingleConnectionBanco;
 import model.ModelLogin;
@@ -17,7 +20,7 @@ public class DAOUsuarioRepository {
 		
 	}
 	
-	public void gravarUsuario(ModelLogin objeto) throws SQLException {
+	public ModelLogin gravarUsuario(ModelLogin objeto) throws SQLException {
 		
 		
 		
@@ -34,7 +37,34 @@ public class DAOUsuarioRepository {
 		statement.execute();
 		connection.commit();
 		
+		return this.consultaUsuario(objeto.getLogin());
+		
 
+	}
+	
+	public ModelLogin consultaUsuario(String login) throws SQLException {
+		
+		ModelLogin modelLogin = new ModelLogin();
+		
+		String sql ="select * from model_login where upper(login) = upper('"+login+"');";
+		PreparedStatement statement = connection.prepareStatement(sql);
+		
+		ResultSet resultado =  statement.executeQuery();// traz do banco as informações
+		
+		while (resultado.next()) {
+			//objeto recebe , do objeto resultado, com referencia da coluna id o valor do tipo correspondente
+			modelLogin.setId(resultado.getLong("id"));
+			modelLogin.setEmail(resultado.getString("email"));
+			modelLogin.setLogin(resultado.getString("login"));
+			modelLogin.setSenha(resultado.getString("senha"));
+			
+		}
+		
+		
+		
+		return modelLogin;
+		
+		
 	}
 
 }

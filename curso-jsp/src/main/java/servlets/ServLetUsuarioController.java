@@ -44,14 +44,15 @@ public class ServLetUsuarioController extends HttpServlet {
 		modelLogin.setLogin(login);
 		modelLogin.setSenha(senha);
 		
-		
-		
 		try {
-			daoUsuarioRepository.gravarUsuario(modelLogin);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}	
+			modelLogin = daoUsuarioRepository.gravarUsuario(modelLogin);
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
 		
+		
+		
+			
 		request.setAttribute("msg", "Operação Realizada com Sucesso!");
 		request.setAttribute("modelLogin", modelLogin);
 		RequestDispatcher redireciona = request.getRequestDispatcher("principal/usuario.jsp");
