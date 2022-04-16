@@ -22,6 +22,8 @@ public class DAOUsuarioRepository {
 
 	public ModelLogin gravarUsuario(ModelLogin objeto) throws SQLException {
 
+		if(objeto.isNovo()) {
+		
 		String sql = "INSERT INTO model_login(login, senha, nome, email) VALUES (?, ? , ? , ?);";
 
 		PreparedStatement statement = connection.prepareStatement(sql);
@@ -34,6 +36,21 @@ public class DAOUsuarioRepository {
 		statement.execute();
 		connection.commit();
 
+		
+		}else {
+			String sql = "UPDATE public.model_login SET login=?, senha=?, id=?, nome=?, email=? WHERE "+objeto.getId()+";";
+			
+			PreparedStatement preparesql = connection.prepareStatement(sql);
+			
+			preparesql.setString(1, objeto.getLogin());
+			preparesql.setString(2, objeto.getSenha());
+			preparesql.setString(3, objeto.getNome());
+			preparesql.setString(4, objeto.getEmail());
+			
+			preparesql.executeUpdate();
+			connection.commit();
+		}
+		
 		return this.consultaUsuario(objeto.getLogin());
 
 	}
