@@ -26,10 +26,69 @@ public class ServLetUsuarioController extends HttpServlet {
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		//Usado para Consultar e Deletar
+		
+		
+		try {
+			
+		
+		String acao = request.getParameter("acao");
+		
+		if(acao != null && !acao.isEmpty() && acao.equalsIgnoreCase("deletar")) {
+			String idUser = request.getParameter("id");
+			
+			daoUsuarioRepository.deletarUser(idUser);
+			
+			request.setAttribute("msg", "Excluido com Sucesso!");
+			request.getRequestDispatcher("principal/usuario.jsp").forward(request, response);
+		
+		
+		}else
+			
+			if(acao != null && !acao.isEmpty() && acao.equalsIgnoreCase("deletarajax")) {
+				String idUser = request.getParameter("Id");
+				
+				daoUsuarioRepository.deletarUser(idUser);
+				
+				
+				response.getWriter().write("Excluido com sucesso!");
+			
+				
+		}else
+					
+			if(acao != null && !acao.isEmpty() && acao.equalsIgnoreCase("buscarUserAjax")) {
+				
+				String nomeBusca = request.getParameter("nomeBusca");
+				System.out.println(nomeBusca);
+						
+				//daoUsuarioRepository.consultaUsuario(nomeBusca);
+						
+						
+				//response.getWriter().write("Excluido com sucesso!");
+				
+			}else {
+				
+				request.getRequestDispatcher("principal/usuario.jsp").forward(request, response);
+			}
+		
+		// deletando ou não ele vai retornar para o usuario. por isso a linha abaixo esta após as chaves.
+		
+		}catch (Exception e) {
+			e.printStackTrace();
+			RequestDispatcher redirecionar = request.getRequestDispatcher("erro.jsp");
+			request.setAttribute("msg", e.getMessage());
+			redirecionar.forward(request, response);
+		}
+		
+		
+		
+		
 	}
+	
+	
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+		//Salvar e atualizar
 		
 		String msg = "Operação Realizada com sucesso!";
 		String id = request.getParameter("id");
@@ -57,6 +116,9 @@ public class ServLetUsuarioController extends HttpServlet {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
+			RequestDispatcher redirecionar = request.getRequestDispatcher("erro.jsp");
+			request.setAttribute("msg", e.getMessage());
+			redirecionar.forward(request, response);
 		}
 		
 			
