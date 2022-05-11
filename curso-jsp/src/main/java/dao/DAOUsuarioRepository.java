@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.jdt.internal.compiler.flow.ExceptionHandlingFlowContext;
 
@@ -55,6 +57,37 @@ public class DAOUsuarioRepository {
 		
 		return this.consultaUsuario(objeto.getLogin());
 
+	}
+	
+	public List<ModelLogin> consultausuarioList(String nome) throws SQLException{
+		
+		List<ModelLogin> retorno = new ArrayList<ModelLogin>();
+		
+		
+		String sql = "select * from model_login where upper(nome) like upper(?)";
+		PreparedStatement statement = connection.prepareStatement(sql);
+		statement.setString(1, "%"+nome+"%");
+		
+		ResultSet resultado = statement.executeQuery();// traz do banco as informações
+		
+		while (resultado.next()) { // se tem resultado
+			// objeto recebe , do objeto resultado, com referencia da coluna id o valor do
+			// tipo correspondente
+			
+			ModelLogin modelLogin = new ModelLogin();
+			
+			modelLogin.setId(resultado.getLong("id"));
+			modelLogin.setEmail(resultado.getString("email"));
+			modelLogin.setLogin(resultado.getString("login"));
+			modelLogin.setNome(resultado.getString("nome"));
+			
+			retorno.add(modelLogin);
+		
+		
+		
+		}
+		
+		return retorno;
 	}
 
 	public ModelLogin consultaUsuario(String login) throws SQLException {
